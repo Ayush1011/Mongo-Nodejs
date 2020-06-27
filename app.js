@@ -16,11 +16,11 @@ var leaderRouter = require('./routes/leaderRouter');
 var passport = require('passport')
 var authenticate = require('./authenticate')
 const mongoose = require('mongoose');
-
+var config = require('./config')
 const Dishes = require('./models/dishes');
 
 //setiing up the url to the db
-const url = 'mongodb://localhost:27017/conFusion';
+const url = config.mongorl ;
 const connect = mongoose.connect(url);
 //establishing the collection to the server
 connect.then((db) => {
@@ -39,38 +39,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //setting up the session middleware with the various options
-app.use(session({
-  name: 'session-id',
-  secret: '12345-67890-09876-54321',
-  saveUninitialized: false,
-  resave: false,
-  store: new FileStore()
-}));
+
 
 app.use(passport.initialize())
-app.use(passport.session())
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // authentication function
-function auth (req, res, next) {
-    console.log(req.session);
-
-  if(!req.user) {
-      var err = new Error('You are not authenticated!');
-      err.status = 403;
-      return next(err);
-  		}
-
-  else {
-
-    
-      next();
-    } 
-	}
 
 
-app.use(auth)
+
+
+
+
+
 
 
 
